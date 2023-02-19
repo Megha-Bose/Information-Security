@@ -1,7 +1,7 @@
 ## Pseudo-random Generator
 
 
-To make a psedo-random-generator, we take the Discrete Logarithm Problem (DLP) as one-way function (owf) denoted by $f$.
+To make a pseudo-random-generator, we take the Discrete Logarithm Problem (DLP) as one-way function (owf) denoted by $f$.
 
 DLP: Given $p, g$ and $f(x) = g^x \ (mod\ p)$, $\forall$ Probabilistic Polynomial-time Turing Machine (PPTM) $A$, it is computationally infeasible for $A$ to find a $y$ such that $f(x) = f(y)$.
 
