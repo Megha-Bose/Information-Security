@@ -130,8 +130,6 @@ if __name__ == "__main__":
                 cipher = cpa.enc(str(m), int(r))
                 if cipher != out[i][:-1]:
                     flag = 1
-                    print(cipher, out[i][:-1])
-                    print(len(str(m)), len(cipher), len(out[i][:-1]), n)
                     print("Mismatch")
                 dec = cpa.dec(cipher)
                 if dec != str(m):
