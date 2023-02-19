@@ -1,10 +1,12 @@
+import os, sys
 from typing import Optional
 
+parent = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath("_file_")), os.pardir))
+sys.path.insert(0, parent)
 
 class MAC:
     def __init__(self, security_parameter: int, prime_field: int,
-                 generator: int,
-                 seed: int):
+                 generator: int, seed: int):
         """
         Initialize the values here
         :param security_parameter: 1ⁿ
@@ -18,7 +20,7 @@ class MAC:
         """
         pass
 
-    def mac(self, message: str, random_identifier: int) -> int:
+    def mac(self, message: str, random_identifier: int) -> str:
         """
         Generate tag t
         :param random_identifier: r
@@ -28,12 +30,12 @@ class MAC:
         """
         pass
 
-    def vrfy(self, message: str, tag: int) -> bool:
+    def vrfy(self, message: str, tag: str) -> bool:
         """
         Verify whether the tag commits to the message
         :param message: m
         :type message: str
         :param tag: t
-        :type tag: int
+        :type tag: str
         """
         pass

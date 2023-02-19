@@ -1,9 +1,12 @@
+import os, sys
 from typing import Optional
 
+parent = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath("_file_")), os.pardir))
+sys.path.insert(0, parent)
 
 class CBC_MAC:
     def __init__(self, security_parameter: int, generator: int,
-                 prime_field: int, expansion_factor: int, keys: list[int]):
+                 prime_field: int, keys: list[int]):
         """
         Initialize the values here
         :param security_parameter: 1ⁿ
@@ -12,8 +15,6 @@ class CBC_MAC:
         :type generator: int
         :param prime_field: q
         :type prime_field: int
-        :param expansion_factor: l(n)
-        :type expansion_factor: int
         :param keys: k₁, k₂
         :type keys: list[int]
         """
@@ -22,7 +23,7 @@ class CBC_MAC:
     def mac(self, message: str) -> int:
         """
         Message Authentication code for message
-        :param message: m (with length l(n).n)
+        :param message: message encoded as bit-string m
         :type message: str
         """
         pass
