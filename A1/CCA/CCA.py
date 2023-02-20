@@ -65,7 +65,7 @@ class CCA:
             cpa = CPA(self.security_parameter, self.prime_field, self.generator, self.key_cpa, self.cpa_mode)
             message = cpa.dec(c)
             return message
-        
+
 
 import csv
 if __name__ == "__main__":
@@ -77,13 +77,12 @@ if __name__ == "__main__":
         i = 0
         for lines in csvFile:
             if i > 0:
-                lines = [int(val) for val in lines]
-                n = lines[0] 
-                p = lines[1]
-                g = lines[2]
-                k_cpa = lines[3]
-                k_mac1 = lines[4]
-                k_mac2 = lines[5]
+                n = int(lines[0]) 
+                p = int(lines[1])
+                g = int(lines[2])
+                k_cpa = int(lines[3])
+                k_mac1 = int(lines[4])
+                k_mac2 = int(lines[5])
                 m = lines[6]
                 r = lines[7]
                 cca = CCA(n, p, g, k_cpa, [k_mac1, k_mac2], "CTR")

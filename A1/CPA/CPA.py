@@ -64,6 +64,7 @@ class CPA:
         ciphertext = bin(random_seed)[2:].zfill(block_size)
         blck_no = 0
         curr_ciphertext = None
+
         for blck in msg_blocks:
             blck_no += 1
             if self.mode == "CTR":
@@ -133,11 +134,10 @@ if __name__ == "__main__":
         i = 0
         for lines in csvFile:
             if i > 0:
-                lines = [int(val) for val in lines]
-                n = lines[0] 
-                p = lines[1]
-                g = lines[2]
-                k = lines[3]
+                n = int(lines[0]) 
+                p = int(lines[1])
+                g = int(lines[2])
+                k = int(lines[3])
                 m = lines[4]
                 r = lines[5]
                 cpa = CPA(n, p, g, k, "CTR")
