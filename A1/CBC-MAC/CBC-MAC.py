@@ -1,5 +1,5 @@
 import os, sys
-from typing import Optional
+from typing import Optional, List
 
 parent = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath("_file_")), os.pardir))
 sys.path.insert(0, parent)
@@ -8,7 +8,7 @@ from PRF.PRF import PRF
 
 class CBC_MAC:
     def __init__(self, security_parameter: int, generator: int,
-                 prime_field: int, keys: list[int]):
+                 prime_field: int, keys: list):
         """
         Initialize the values here
         :param security_parameter: 1ⁿ
@@ -31,7 +31,39 @@ class CBC_MAC:
         :param message: message encoded as bit-string m
         :type message: str
         """
-        pass
+        block_size = self.security_parameter
+        l = len(message)
+        msg_blocks = []
+        i = 0
+        d = 0
+        while i + block_size < l:
+            msg_blocks.append(message[i:i+block_size])
+            i += block_size
+            d += 1
+        if i < l:
+            msg = message[i:l]
+            start = i
+            end = i + block_size
+            i = l
+            while i < end:
+                if i == l:
+                    msg += "1"
+                else:
+                    msg += ("0"*(end-i))
+                i += 1
+            msg_blocks.append(msg)
+            d += 1
+        blck_no = 0
+        initial = "0"*block_size
+        curr_tag = int(initial, 2)
+        for blck in msg_blocks:
+            blck_no += 1
+            prf = PRF(self.security_parameter, self.generator, self.prime_field, self.keys[0])
+            inp = curr_tag ^ int(blck, 2)
+            curr_tag = prf.evaluate(inp)
+        prf = PRF(self.security_parameter, self.generator, self.prime_field, self.keys[1])
+        final_tag = prf.evaluate(curr_tag)
+        return final_tag
 
     def vrfy(self, message: str, tag: int) -> bool:
         """
@@ -41,7 +73,7 @@ class CBC_MAC:
         :param tag: t
         :type tag: int
         """
-        pass
+        return self.mac(message) == tag
 
 
 import csv
@@ -63,12 +95,13 @@ if __name__ == "__main__":
                 m = lines[5]
                 cbc_mac = CBC_MAC(n, g, p, [k1, k2])
                 tag = cbc_mac.mac(str(m))
-                if cipher != out[i][:-1]:
+                if str(tag) != out[i][:-1]:
                     flag = 1
+                    print(tag, out[i][:-1])
                     print("Mismatch")
-                check = mac.vrfy(m, tag)
+                check = cbc_mac.vrfy(str(m), tag)
                 if check != 1:
                     print("Not verified!")
             i += 1
     if flag == 0:
-        print("OK")vv
+        print("OK")

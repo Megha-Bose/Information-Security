@@ -77,46 +77,9 @@ class MAC:
         :param tag: t
         :type tag: str
         """
-        check = False
         block_size = self.security_parameter // 4
-        l = len(message)
-        msg_blocks = []
-        i = 0
-        d = 0
-        while i + block_size < l:
-            msg_blocks.append(message[i:i+block_size])
-            i += block_size
-            d += 1
-        if i < l:
-            msg = message[i:l]
-            start = i
-            end = i + block_size
-            i = l
-            while i < end:
-                if i == l:
-                    msg += "1"
-                else:
-                    msg += ("0"*(end-i))
-                i += 1
-            msg_blocks.append(msg)
-            d += 1
-        blck_no = 0
         random_identifier = int(tag[:block_size], 2)
-        calc_tag = bin(random_identifier)[2:].zfill(block_size)
-        for blck in msg_blocks:
-            blck_no += 1
-            prf = PRF(self.security_parameter, self.generator, self.prime_field, self.seed)
-            rdim = ""
-            rdim += bin(random_identifier)[2:].zfill(block_size)
-            rdim += bin(d)[2:].zfill(block_size)
-            rdim += bin(blck_no)[2:].zfill(block_size)
-            rdim += blck
-            curr_tag = prf.evaluate(int(rdim, 2))
-            calc_tag += bin(curr_tag)[2:].zfill(block_size * 4)
-        if calc_tag == tag:
-            check = True
-        return check
-
+        return self.mac(message, random_identifier) == tag
 
 
 import csv
