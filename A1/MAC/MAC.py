@@ -52,6 +52,7 @@ class MAC:
                     msg += "1"
                 else:
                     msg += ("0"*(end-i))
+                    break
                 i += 1
             msg_blocks.append(msg)
             d += 1

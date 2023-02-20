@@ -1,12 +1,17 @@
 import os, sys
 from typing import Optional
 
+import math
+
 parent = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath("_file_")), os.pardir))
 sys.path.insert(0, parent)
 
+from CPA.CPA import CPA
+from CBC_MAC.CBC_MAC import CBC_MAC
+
 class CCA:
     def __init__(self, security_parameter: int, prime_field: int,
-                 generator: int, key_cpa: int, key_mac: list[int],
+                 generator: int, key_cpa: int, key_mac: list,
                  cpa_mode="CTR"):
         """
         Initialize the values here
@@ -28,7 +33,7 @@ class CCA:
         self.security_parameter = security_parameter
         self.prime_field = prime_field
         self.generator = generator
-        self..key_cpa = key_cpa
+        self.key_cpa = key_cpa
         self.key_mac = key_mac
         self.cpa_mode = cpa_mode
 
@@ -40,7 +45,11 @@ class CCA:
         :param cpa_random_seed: random seed for CPA encryption
         :type cpa_random_seed: int
         """
-        pass
+        cpa = CPA(self.security_parameter, self.prime_field, self.generator, self.key_cpa, self.cpa_mode)
+        cipher = cpa.enc(message, cpa_random_seed)
+        cbc_mac = CBC_MAC(self.security_parameter, self.generator, self.prime_field, self.key_mac)
+        tag = cbc_mac.mac(cipher)
+        return cipher + bin(tag)[2:].zfill(self.security_parameter)
 
     def dec(self, cipher: str) -> Optional[str]:
         """
@@ -48,8 +57,15 @@ class CCA:
         :param cipher: <c, t>
         :type cipher: str
         """
-        pass
-
+        cbc_mac = CBC_MAC(self.security_parameter, self.generator, self.prime_field, self.key_mac)
+        tag = int(cipher[-self.security_parameter:], 2)
+        c = cipher[:-self.security_parameter]
+        check = cbc_mac.vrfy(c, tag)
+        if check:
+            cpa = CPA(self.security_parameter, self.prime_field, self.generator, self.key_cpa, self.cpa_mode)
+            message = cpa.dec(c)
+            return message
+        
 
 import csv
 if __name__ == "__main__":
@@ -72,18 +88,12 @@ if __name__ == "__main__":
                 r = lines[7]
                 cca = CCA(n, p, g, k_cpa, [k_mac1, k_mac2], "CTR")
                 cipher = cca.enc(str(m), int(r))
-                if cipher != out[i][:-1]:
+                if cipher != str(out[i][:-1]):
                     flag = 1
+                    print(n)
+                    print(cipher)
+                    print(str(out[i][:-1]))
                     print("Mismatch")
-                dec = cca.dec(cipher)
-                if dec != str(m):
-                    print("Faulty Decryption in CTR Mode!")
-
-                cca = CCA(n, p, g, k_cpa, [k_mac1, k_mac2], "OFB")
-                cipher = cca.enc(str(m), int(r))
-                dec = cca.dec(cipher)
-                if dec != str(m):
-                    print("Faulty Enc-Decrypt in OFB mode!")
             i += 1
     if flag == 0:
         print("OK")

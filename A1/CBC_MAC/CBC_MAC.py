@@ -1,5 +1,5 @@
 import os, sys
-from typing import Optional, List
+from typing import Optional
 
 parent = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath("_file_")), os.pardir))
 sys.path.insert(0, parent)
@@ -50,6 +50,7 @@ class CBC_MAC:
                     msg += "1"
                 else:
                     msg += ("0"*(end-i))
+                    break
                 i += 1
             msg_blocks.append(msg)
             d += 1

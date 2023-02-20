@@ -41,14 +41,28 @@ class CPA:
         block_size = self.security_parameter
         l = len(message)
         msg_blocks = []
-        while l - block_size > 0:
-            msg_blocks.append(message[l-block_size:l])
-            l -= block_size
-        if l > 0:
-            msg_blocks.append(message[0:l].zfill(block_size))
+        i = 0
+        d = 0
+        while i + block_size < l:
+            msg_blocks.append(message[i:i+block_size])
+            i += block_size
+            d += 1
+        if i < l:
+            msg = message[i:l]
+            start = i
+            end = i + block_size
+            i = l
+            while i < end:
+                if i == l:
+                    msg += "1"
+                else:
+                    msg += ("0"*(end-i))
+                    break
+                i += 1
+            msg_blocks.append(msg)
+            d += 1
         ciphertext = bin(random_seed)[2:].zfill(block_size)
         blck_no = 0
-        msg_blocks = msg_blocks[::-1]
         curr_ciphertext = None
         for blck in msg_blocks:
             blck_no += 1
