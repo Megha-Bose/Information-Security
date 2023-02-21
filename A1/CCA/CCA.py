@@ -1,3 +1,4 @@
+from __future__ import annotations
 import os, sys
 from typing import Optional
 
@@ -11,7 +12,7 @@ from CBC_MAC.CBC_MAC import CBC_MAC
 
 class CCA:
     def __init__(self, security_parameter: int, prime_field: int,
-                 generator: int, key_cpa: int, key_mac: list,
+                 generator: int, key_cpa: int, key_mac: list[int],
                  cpa_mode="CTR"):
         """
         Initialize the values here

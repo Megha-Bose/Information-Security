@@ -1,3 +1,4 @@
+from __future__ import annotations
 import os, sys
 from typing import Optional
 
@@ -8,7 +9,7 @@ from PRF.PRF import PRF
 
 class CBC_MAC:
     def __init__(self, security_parameter: int, generator: int,
-                 prime_field: int, keys: list):
+                 prime_field: int, keys: list[int]):
         """
         Initialize the values here
         :param security_parameter: 1ⁿ
