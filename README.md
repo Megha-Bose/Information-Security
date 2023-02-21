@@ -32,7 +32,7 @@ A variable-length message authentication code scheme that returns the tag when t
 ### CBC-MAC
 A variable-length CBC-MAC using the previously implemented PRF.
 
-[Code](A1/CBC-MAC/CBC-MAC.py)
+[Code](A1/CBC_MAC/CBC_MAC.py)
 
 ### CCA-Secure Encryption Scheme
 A CCA secure scheme using the CPA and CBC-MAC implementations that returns the cipher-text when then in-class function enc() is invoked and returns the plain-text (or not) when the in-class function dec() is invoked. 
